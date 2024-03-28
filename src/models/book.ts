@@ -1,0 +1,19 @@
+import { Schema, Types, model } from "mongoose";
+
+interface IBook {
+    userId: string;
+    title: string;
+    author: string;
+    completed: Date;
+    mode: string;
+}
+
+const bookSchema = new Schema<IBook>({
+    userId: Types.ObjectId,
+    title: String,
+    author: String,
+    completed: Date,
+    mode: String
+  });
+  
+export const Book = model<IBook>("Book", bookSchema);

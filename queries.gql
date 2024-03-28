@@ -1,0 +1,46 @@
+# Queries
+#
+query getUsers {
+  users {
+    id
+    email
+    name
+    shareBooks
+    shareMovies
+  }
+}
+
+query getUser($userId: ID!) {
+  user(id: $userId) {
+    id
+    email
+    name
+    shareBooks
+    shareMovies
+  }
+}
+
+query getBooks($userId: ID!) {
+  books(userId: $userId) {
+    author
+    title
+    mode
+    completed
+  }
+}
+
+query getMovies($userId: ID!) {
+  movies(userId: $userId) {
+    title
+    year
+    notes
+    completed
+    imdbId
+  }
+}
+
+# Variables
+#
+{
+  "userId": "57a8ba0bd901937c0275bce5",
+}
