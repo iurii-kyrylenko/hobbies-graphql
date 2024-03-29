@@ -1,6 +1,6 @@
 import { Schema, Types, model } from "mongoose";
 
-interface IBook {
+export interface IBook {
     userId: string;
     title: string;
     author: string;
@@ -16,4 +16,4 @@ const bookSchema = new Schema<IBook>({
     mode: String
   });
   
-export const Book = model<IBook>("Book", bookSchema);
+export const registerBookModel = () => model<IBook>("Book", bookSchema);

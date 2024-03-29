@@ -1,6 +1,6 @@
 import { Schema, Types, model } from "mongoose";
 
-interface IMovie {
+export interface IMovie {
     userId: string;
     title: string;
     year: string;
@@ -18,4 +18,4 @@ const movieSchema = new Schema<IMovie>({
   imdbId: String
 });
   
-export const Movie = model<IMovie>("Movie", movieSchema);
+export const registerMovieModel = () => model<IMovie>("Movie", movieSchema);

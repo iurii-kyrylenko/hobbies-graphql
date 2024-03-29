@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-interface IUser {
+export interface IUser {
     email: string;
     name: string;
     hash: string;
@@ -18,4 +18,4 @@ const userSchema = new Schema<IUser>({
     shareMovies: Boolean,
   });
   
-export const User = model<IUser>("User", userSchema);
+export const registerUserModel = () => model<IUser>("User", userSchema);

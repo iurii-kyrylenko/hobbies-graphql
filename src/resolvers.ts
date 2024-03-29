@@ -1,3 +1,9 @@
+import { MongoDataSource } from "./data-sources/mongo";
+
+interface IContextValue {
+    dataSources: { mongoDataSource: MongoDataSource }
+}
+
 export const resolvers = {
     BookKind: {
         REGULAR: 'r',
@@ -6,20 +12,20 @@ export const resolvers = {
     },
 
     Query: {
-      users: (_parent, _args, { dataSources }) => {
-        return dataSources.mongoDataSource.getUsers();
-      },
+        users: (_parent, _args, { dataSources }: IContextValue) => {
+            return dataSources.mongoDataSource.getUsers();
+        },
 
-      user: (_parent, { id }, { dataSources }) => {
-        return dataSources.mongoDataSource.getUser(id);
-      },
+        user: (_parent, { id }, { dataSources }: IContextValue) => {
+            return dataSources.mongoDataSource.getUser(id);
+        },
 
-      books: (_parent, { userId }, { dataSources }) => {
-        return dataSources.mongoDataSource.getBooks(userId);
-      },
+        books: (_parent, { userId }, { dataSources }: IContextValue) => {
+            return dataSources.mongoDataSource.getBooks(userId);
+        },
 
-      movies: (_parent, { userId }, { dataSources }) => {
-        return dataSources.mongoDataSource.getMovies(userId);
-      },
+        movies: (_parent, { userId }, { dataSources }: IContextValue) => {
+            return dataSources.mongoDataSource.getMovies(userId);
+        },
     },
 };
