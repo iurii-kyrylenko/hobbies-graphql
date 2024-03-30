@@ -1,4 +1,4 @@
-# Queries
+# Operation
 #
 query getUsers {
   users {
@@ -29,6 +29,16 @@ query getBooks($userId: ID!) {
   }
 }
 
+query getBook($bookId: ID!) {
+  book(id: $bookId) {
+    id
+    author
+    title
+    mode
+    completed
+  }
+}
+
 query getMovies($userId: ID!) {
   movies(userId: $userId) {
     title
@@ -39,8 +49,47 @@ query getMovies($userId: ID!) {
   }
 }
 
+mutation CreateBook($bookContent: CreateBookContent!) {
+  createBook(bookContent: $bookContent) {
+    id
+    author
+    title
+    mode
+    completed
+  }
+}
+
+mutation UpdateBook($bookId: ID!, $bookContent: UpdateBookContent!) {
+  updateBook(id: $bookId, bookContent: $bookContent) {
+    id
+    author
+    title
+    mode
+    completed
+  }
+}
+
+mutation DeleteBook($bookId: ID!) {
+  deleteBook(id: $bookId) {
+    id
+    userId
+    author
+    title
+  }
+}
+
 # Variables
 #
 {
   "userId": "57a8ba0bd901937c0275bce5",
+
+  "bookId": "6608531b81bdbf80bfecbd7b",
+
+  "bookContent": {
+    "userId": "57a8ba0bd901937c0275bce5",
+    "author": "Author-42",
+    "title": "Title-42",
+    "mode": "MIXED",
+    "completed": "2024-04-01",
+  },
 }

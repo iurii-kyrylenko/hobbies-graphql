@@ -24,8 +24,27 @@ export const resolvers = {
             return dataSources.mongoDataSource.getBooks(userId);
         },
 
+        book: (_parent, { id }, { dataSources }: IContextValue) => {
+            return dataSources.mongoDataSource.getBook(id);
+        },
+
         movies: (_parent, { userId }, { dataSources }: IContextValue) => {
             return dataSources.mongoDataSource.getMovies(userId);
         },
     },
+
+
+    Mutation: {
+        createBook: (_parent, { bookContent }, { dataSources }: IContextValue) => {
+            return dataSources.mongoDataSource.createBook(bookContent);
+        },
+
+        updateBook: (_parent, { id, bookContent }, { dataSources }: IContextValue) => {
+            return dataSources.mongoDataSource.updateBook(id, bookContent);
+        },
+
+        deleteBook: (_parent, { id }, { dataSources }: IContextValue) => {
+            return dataSources.mongoDataSource.deleteBook(id);
+        }
+    }
 };

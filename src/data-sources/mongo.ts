@@ -26,7 +26,23 @@ export class MongoDataSource {
         return this.Book.find({ userId });
     }
 
+    async getBook(id: string) {
+        return this.Book.findById(id);
+    }
+
     async getMovies(userId: string) {
         return this.Movie.find({ userId });
+    }
+
+    async createBook(bookContent: IBook) {
+        return this.Book.create(bookContent);
+    }
+
+    async updateBook(id: string, bookContent: IBook) {
+        return this.Book.findByIdAndUpdate(id, bookContent, { returnDocument: "after" });
+    }
+
+    async deleteBook(id: string) {
+        return this.Book.findByIdAndDelete(id);
     }
 }
