@@ -49,9 +49,21 @@ query getMovies($userId: ID!) {
   }
 }
 
+query getMovie($movieId: ID!) {
+  movie(id: $movieId) {
+    id
+    title
+    year
+    notes
+    imdbId
+    completed
+  }
+}
+
 mutation CreateBook($bookContent: CreateBookContent!) {
   createBook(bookContent: $bookContent) {
     id
+    userId
     author
     title
     mode
@@ -78,18 +90,61 @@ mutation DeleteBook($bookId: ID!) {
   }
 }
 
+mutation CreateMovie($movieContent: CreateMovieContent!) {
+  createMovie(movieContent: $movieContent) {
+    id
+    title
+    year
+    notes
+    imdbId
+    completed
+  }
+}
+
+
+mutation UpdateMovie($movieId: ID!, $movieContent: UpdateMovieContent!) {
+  updateMovie(id: $movieId, movieContent: $movieContent) {
+    id
+    title
+    year
+    notes
+    imdbId
+    completed
+  }
+}
+
+mutation DeleteMovie($movieId: ID!) {
+  deleteMovie(id: $movieId) {
+    id
+    userId
+    title
+    year
+  }
+}
+
 # Variables
 #
 {
   "userId": "57a8ba0bd901937c0275bce5",
 
-  "bookId": "6608531b81bdbf80bfecbd7b",
+  "bookId": "660980f246701f82d85ec717",
+
+  "movieId": "6609d66bc2f431e251ca2103",
 
   "bookContent": {
     "userId": "57a8ba0bd901937c0275bce5",
-    "author": "Author-42",
-    "title": "Title-42",
+    "author": "Author-422",
+    "title": "Title-422",
     "mode": "MIXED",
+    "completed": "2024-04-01",
+  },
+
+ "movieContent": {
+    "userId": "57a8ba0bd901937c0275bce5",
+    "title": "Title-422",
+    "year": "2024",
+    "notes": "answer: 42",
+    "imdbId": "tt424242",
     "completed": "2024-04-01",
   },
 }

@@ -27,6 +27,10 @@ export const resolvers: Resolvers = {
         movies: (_parent, { userId }, { dataSources }) => {
             return dataSources.mongoDataSource.getMovies(userId);
         },
+
+        movie: (_parent, { id }, { dataSources }) => {
+            return dataSources.mongoDataSource.getMovie(id);
+        },
     },
 
     Mutation: {
@@ -40,6 +44,18 @@ export const resolvers: Resolvers = {
 
         deleteBook: (_parent, { id }, { dataSources }) => {
             return dataSources.mongoDataSource.deleteBook(id);
+        },
+
+        createMovie: (_parent, { movieContent }, { dataSources }) => {
+            return dataSources.mongoDataSource.createMovie(movieContent);
+        },
+
+        updateMovie: (_parent, { id, movieContent }, { dataSources }) => {
+            return dataSources.mongoDataSource.updateMovie(id, movieContent);
+        },
+
+        deleteMovie: (_parent, { id }, { dataSources }) => {
+            return dataSources.mongoDataSource.deleteMovie(id);
         }
     }
 };

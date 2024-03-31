@@ -3,7 +3,15 @@ import { IUser } from "../models/user";
 import { IBook } from "../models/book";
 import { IMovie } from "../models/movie";
 
-import { Book, Movie, User, CreateBookContent, UpdateBookContent } from "../__generated__/resolvers-types";
+import {
+    Book,
+    Movie,
+    User,
+    CreateBookContent,
+    UpdateBookContent,
+    CreateMovieContent,
+    UpdateMovieContent,
+} from "../__generated__/resolvers-types";
 
 export class MongoDataSource {
     private UserModel: Model<IUser>;
@@ -32,10 +40,6 @@ export class MongoDataSource {
         return this.BookModel.findById(id);
     }
 
-    async getMovies(userId: string): Promise<Movie[]> {
-        return this.MovieModel.find({ userId });
-    }
-
     async createBook(bookContent: CreateBookContent): Promise<Book> {
         const doc = await this.BookModel.create(bookContent);
         return this.getBook(doc.id);
@@ -47,5 +51,26 @@ export class MongoDataSource {
 
     async deleteBook(id: string): Promise<Book> {
         return this.BookModel.findByIdAndDelete(id);
+    }
+
+    async getMovies(userId: string): Promise<Movie[]> {
+        return this.MovieModel.find({ userId });
+    }
+
+    async getMovie(id: string): Promise<Movie> {
+        return this.MovieModel.findById(id);
+    }
+
+    async createMovie(movieContent: CreateMovieContent): Promise<Movie> {
+        const doc = await this.MovieModel.create(movieContent);
+        return this.getMovie(doc.id);
+    }
+
+    async updateMovie(id: string, movieContent: UpdateMovieContent): Promise<Movie> {
+        return this.MovieModel.findByIdAndUpdate(id, movieContent, { returnDocument: "after" });
+    }
+
+    async deleteMovie(id: string): Promise<Movie> {
+        return this.MovieModel.findByIdAndDelete(id);
     }
 }

@@ -49,16 +49,39 @@ type Movie {
     imdbId: String
 }
 
+input CreateMovieContent {
+    userId: ID!
+    title: String!
+    year: String!
+    notes: String
+    completed: Date!
+    imdbId: String
+}
+
+input UpdateMovieContent {
+    userId: ID
+    title: String
+    year: String
+    notes: String
+    completed: Date
+    imdbId: String
+}
+
 type Query {
     users: [User]!
     user(id: ID!): User
     books(userId: ID!): [Book]
     book(id: ID!): Book
     movies(userId: ID!): [Movie]
+    movie(id: ID!): Movie
 }
 
 type Mutation {
     createBook(bookContent: CreateBookContent!): Book
     updateBook(id: ID!, bookContent: UpdateBookContent!): Book
     deleteBook(id: ID!): Book
+
+    createMovie(movieContent: CreateMovieContent!): Movie
+    updateMovie(id: ID!, movieContent: UpdateMovieContent!): Movie
+    deleteMovie(id: ID!): Movie
 }
