@@ -2,10 +2,18 @@ import dotenv from "dotenv";
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { Mongoose, connect } from "mongoose";
+import { readFileSync } from "fs";
 import { MongoDataSource } from "./data-sources/mongo";
-import { typeDefs } from "./type-defs";
 import { resolvers } from "./resolvers";
 import { registerModels } from "./models/register-models";
+
+const typeDefs = readFileSync("./schema.graphql", { encoding: "utf-8" });
+
+export interface IContextValue {
+    dataSources: {
+        mongoDataSource: MongoDataSource;
+    };
+}
 
 // dotenv.config();
 dotenv.config({ path: ".env.local" });
@@ -21,7 +29,7 @@ try {
     console.log(error);
 }
 
-const server = new ApolloServer({
+const server = new ApolloServer<IContextValue>({
       typeDefs,
       resolvers,
   });

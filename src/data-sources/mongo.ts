@@ -3,46 +3,49 @@ import { IUser } from "../models/user";
 import { IBook } from "../models/book";
 import { IMovie } from "../models/movie";
 
+import { Book, Movie, User, CreateBookContent, UpdateBookContent } from "../__generated__/resolvers-types";
+
 export class MongoDataSource {
-    private User: Model<IUser>;
-    private Book: Model<IBook>;
-    private Movie: Model<IMovie>;
+    private UserModel: Model<IUser>;
+    private BookModel: Model<IBook>;
+    private MovieModel: Model<IMovie>;
 
     constructor(dbConnection: Mongoose) {
-        this.User = dbConnection.model<IUser>("User");
-        this.Book = dbConnection.model<IBook>("Book");
-        this.Movie = dbConnection.model<IMovie>("Movie");
+        this.UserModel = dbConnection.model("User");
+        this.BookModel = dbConnection.model("Book");
+        this.MovieModel = dbConnection.model("Movie");
     }
 
-    async getUsers() {
-        return this.User.find();
+    async getUsers(): Promise<User[]> {
+        return this.UserModel.find();
     }
 
-    async getUser(id: string) {
-        return this.User.findById(id);
+    async getUser(id: string): Promise<User> {
+        return this.UserModel.findById(id);
     }
 
-    async getBooks(userId: string) {
-        return this.Book.find({ userId });
+    async getBooks(userId: string): Promise<Book[]> {
+        return this.BookModel.find({ userId });
     }
 
-    async getBook(id: string) {
-        return this.Book.findById(id);
+    async getBook(id: string): Promise<Book> {
+        return this.BookModel.findById(id);
     }
 
-    async getMovies(userId: string) {
-        return this.Movie.find({ userId });
+    async getMovies(userId: string): Promise<Movie[]> {
+        return this.MovieModel.find({ userId });
     }
 
-    async createBook(bookContent: IBook) {
-        return this.Book.create(bookContent);
+    async createBook(bookContent: CreateBookContent): Promise<Book> {
+        const doc = await this.BookModel.create(bookContent);
+        return this.getBook(doc.id);
     }
 
-    async updateBook(id: string, bookContent: IBook) {
-        return this.Book.findByIdAndUpdate(id, bookContent, { returnDocument: "after" });
+    async updateBook(id: string, bookContent: UpdateBookContent): Promise<Book> {
+        return this.BookModel.findByIdAndUpdate(id, bookContent, { returnDocument: "after" });
     }
 
-    async deleteBook(id: string) {
-        return this.Book.findByIdAndDelete(id);
+    async deleteBook(id: string): Promise<Book> {
+        return this.BookModel.findByIdAndDelete(id);
     }
 }

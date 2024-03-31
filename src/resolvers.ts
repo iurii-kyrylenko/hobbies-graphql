@@ -1,10 +1,6 @@
-import { MongoDataSource } from "./data-sources/mongo";
+import { Resolvers } from "./__generated__/resolvers-types";
 
-interface IContextValue {
-    dataSources: { mongoDataSource: MongoDataSource }
-}
-
-export const resolvers = {
+export const resolvers: Resolvers = {
     BookKind: {
         REGULAR: 'r',
         AUDIO: 'a',
@@ -12,38 +8,37 @@ export const resolvers = {
     },
 
     Query: {
-        users: (_parent, _args, { dataSources }: IContextValue) => {
+        users: (_parent, _args, { dataSources }) => {
             return dataSources.mongoDataSource.getUsers();
         },
 
-        user: (_parent, { id }, { dataSources }: IContextValue) => {
+        user: (_parent, { id }, { dataSources }) => {
             return dataSources.mongoDataSource.getUser(id);
         },
 
-        books: (_parent, { userId }, { dataSources }: IContextValue) => {
+        books: (_parent, { userId }, { dataSources }) => {
             return dataSources.mongoDataSource.getBooks(userId);
         },
 
-        book: (_parent, { id }, { dataSources }: IContextValue) => {
+        book: (_parent, { id }, { dataSources }) => {
             return dataSources.mongoDataSource.getBook(id);
         },
 
-        movies: (_parent, { userId }, { dataSources }: IContextValue) => {
+        movies: (_parent, { userId }, { dataSources }) => {
             return dataSources.mongoDataSource.getMovies(userId);
         },
     },
 
-
     Mutation: {
-        createBook: (_parent, { bookContent }, { dataSources }: IContextValue) => {
+        createBook: (_parent, { bookContent }, { dataSources }) => {
             return dataSources.mongoDataSource.createBook(bookContent);
         },
 
-        updateBook: (_parent, { id, bookContent }, { dataSources }: IContextValue) => {
+        updateBook: (_parent, { id, bookContent }, { dataSources }) => {
             return dataSources.mongoDataSource.updateBook(id, bookContent);
         },
 
-        deleteBook: (_parent, { id }, { dataSources }: IContextValue) => {
+        deleteBook: (_parent, { id }, { dataSources }) => {
             return dataSources.mongoDataSource.deleteBook(id);
         }
     }
