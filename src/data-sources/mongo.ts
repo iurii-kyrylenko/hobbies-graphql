@@ -1,7 +1,4 @@
 import { Mongoose, Model } from "mongoose"
-import { IUser } from "../models/user";
-import { IBook } from "../models/book";
-import { IMovie } from "../models/movie";
 
 import {
     Book,
@@ -14,9 +11,9 @@ import {
 } from "../__generated__/resolvers-types";
 
 export class MongoDataSource {
-    private UserModel: Model<IUser>;
-    private BookModel: Model<IBook>;
-    private MovieModel: Model<IMovie>;
+    private UserModel: Model<User>;
+    private BookModel: Model<Book>;
+    private MovieModel: Model<Movie>;
 
     constructor(dbConnection: Mongoose) {
         this.UserModel = dbConnection.model("User");
@@ -24,53 +21,51 @@ export class MongoDataSource {
         this.MovieModel = dbConnection.model("Movie");
     }
 
-    async getUsers(): Promise<User[]> {
+    async getUsers() {
         return this.UserModel.find();
     }
 
-    async getUser(id: string): Promise<User> {
+    async getUser(id: string) {
         return this.UserModel.findById(id);
     }
 
-    async getBooks(userId: string): Promise<Book[]> {
-        return this.BookModel.find({ userId });
+    async getBooks(userId: string) {
+        return this.BookModel.find({ userId }).sort({ _id: -1 });
     }
 
-    async getBook(id: string): Promise<Book> {
+    async getBook(id: string) {
         return this.BookModel.findById(id);
     }
 
-    async createBook(bookContent: CreateBookContent): Promise<Book> {
-        const doc = await this.BookModel.create(bookContent);
-        return this.getBook(doc.id);
+    async createBook(bookContent: CreateBookContent) {
+        return this.BookModel.create(bookContent);
     }
 
-    async updateBook(id: string, bookContent: UpdateBookContent): Promise<Book> {
+    async updateBook(id: string, bookContent: UpdateBookContent) {
         return this.BookModel.findByIdAndUpdate(id, bookContent, { returnDocument: "after" });
     }
 
-    async deleteBook(id: string): Promise<Book> {
+    async deleteBook(id: string) {
         return this.BookModel.findByIdAndDelete(id);
     }
 
-    async getMovies(userId: string): Promise<Movie[]> {
-        return this.MovieModel.find({ userId });
+    async getMovies(userId: string) {
+        return this.MovieModel.find({ userId }).sort({ _id: -1 });
     }
 
-    async getMovie(id: string): Promise<Movie> {
+    async getMovie(id: string) {
         return this.MovieModel.findById(id);
     }
 
-    async createMovie(movieContent: CreateMovieContent): Promise<Movie> {
-        const doc = await this.MovieModel.create(movieContent);
-        return this.getMovie(doc.id);
+    async createMovie(movieContent: CreateMovieContent) {
+        return this.MovieModel.create(movieContent);
     }
 
-    async updateMovie(id: string, movieContent: UpdateMovieContent): Promise<Movie> {
+    async updateMovie(id: string, movieContent: UpdateMovieContent) {
         return this.MovieModel.findByIdAndUpdate(id, movieContent, { returnDocument: "after" });
     }
 
-    async deleteMovie(id: string): Promise<Movie> {
+    async deleteMovie(id: string) {
         return this.MovieModel.findByIdAndDelete(id);
     }
 }
