@@ -1,6 +1,6 @@
 import { Schema, Types, model } from "mongoose";
 
-export interface IMovie {
+interface IMovie {
     userId: string;
     title: string;
     year: string;
