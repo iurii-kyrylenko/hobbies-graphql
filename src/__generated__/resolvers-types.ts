@@ -34,6 +34,12 @@ export enum BookKind {
   Regular = 'r'
 }
 
+export type BookPage = {
+  __typename?: 'BookPage';
+  books?: Maybe<Array<Maybe<Book>>>;
+  cursor?: Maybe<Scalars['String']['output']>;
+};
+
 export type CreateBookContent = {
   author: Scalars['String']['input'];
   completed: Scalars['Date']['input'];
@@ -108,6 +114,8 @@ export type Query = {
   __typename?: 'Query';
   book?: Maybe<Book>;
   books?: Maybe<Array<Maybe<Book>>>;
+  booksNextPage?: Maybe<BookPage>;
+  booksPreviousPage?: Maybe<BookPage>;
   movie?: Maybe<Movie>;
   movies?: Maybe<Array<Maybe<Movie>>>;
   user?: Maybe<User>;
@@ -121,6 +129,20 @@ export type QueryBookArgs = {
 
 
 export type QueryBooksArgs = {
+  userId: Scalars['ID']['input'];
+};
+
+
+export type QueryBooksNextPageArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  userId: Scalars['ID']['input'];
+};
+
+
+export type QueryBooksPreviousPageArgs = {
+  before?: InputMaybe<Scalars['String']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
   userId: Scalars['ID']['input'];
 };
 
@@ -239,11 +261,13 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Book: ResolverTypeWrapper<Book>;
   BookKind: BookKind;
+  BookPage: ResolverTypeWrapper<BookPage>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CreateBookContent: CreateBookContent;
   CreateMovieContent: CreateMovieContent;
   Date: ResolverTypeWrapper<Scalars['Date']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Movie: ResolverTypeWrapper<Movie>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
@@ -256,11 +280,13 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Book: Book;
+  BookPage: BookPage;
   Boolean: Scalars['Boolean']['output'];
   CreateBookContent: CreateBookContent;
   CreateMovieContent: CreateMovieContent;
   Date: Scalars['Date']['output'];
   ID: Scalars['ID']['output'];
+  Int: Scalars['Int']['output'];
   Movie: Movie;
   Mutation: {};
   Query: {};
@@ -281,6 +307,12 @@ export type BookResolvers<ContextType = IContextValue, ParentType extends Resolv
 }>;
 
 export type BookKindResolvers = { AUDIO: 'a', MIXED: 'r-a', REGULAR: 'r' };
+
+export type BookPageResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['BookPage'] = ResolversParentTypes['BookPage']> = ResolversObject<{
+  books?: Resolver<Maybe<Array<Maybe<ResolversTypes['Book']>>>, ParentType, ContextType>;
+  cursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date';
@@ -309,6 +341,8 @@ export type MutationResolvers<ContextType = IContextValue, ParentType extends Re
 export type QueryResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   book?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QueryBookArgs, 'id'>>;
   books?: Resolver<Maybe<Array<Maybe<ResolversTypes['Book']>>>, ParentType, ContextType, RequireFields<QueryBooksArgs, 'userId'>>;
+  booksNextPage?: Resolver<Maybe<ResolversTypes['BookPage']>, ParentType, ContextType, RequireFields<QueryBooksNextPageArgs, 'userId'>>;
+  booksPreviousPage?: Resolver<Maybe<ResolversTypes['BookPage']>, ParentType, ContextType, RequireFields<QueryBooksPreviousPageArgs, 'userId'>>;
   movie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<QueryMovieArgs, 'id'>>;
   movies?: Resolver<Maybe<Array<Maybe<ResolversTypes['Movie']>>>, ParentType, ContextType, RequireFields<QueryMoviesArgs, 'userId'>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
@@ -327,6 +361,7 @@ export type UserResolvers<ContextType = IContextValue, ParentType extends Resolv
 export type Resolvers<ContextType = IContextValue> = ResolversObject<{
   Book?: BookResolvers<ContextType>;
   BookKind?: BookKindResolvers;
+  BookPage?: BookPageResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Movie?: MovieResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

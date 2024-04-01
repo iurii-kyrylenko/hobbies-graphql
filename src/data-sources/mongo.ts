@@ -33,6 +33,18 @@ export class MongoDataSource {
         return this.BookModel.find({ userId }).sort({ _id: -1 });
     }
 
+    async getBooksNextPage(userId: string, pageSize: number, cursor: string) {
+        const condition = cursor ? { _id: { $lt: cursor } } : {};
+        const query = this.BookModel.find({ userId, ...condition }).sort({ _id: -1 });
+        return pageSize ? query.limit(pageSize) : query;
+    }
+
+    async getBooksPreviousPage(userId: string, pageSize: number, cursor: string) {
+        const condition = cursor ? { _id: { $gt: cursor } } : {};
+        const query = this.BookModel.find({ userId, ...condition }).sort({ _id: 1 });
+        return pageSize ? query.limit(pageSize) : query;
+    }
+
     async getBook(id: string) {
         return this.BookModel.findById(id);
     }
