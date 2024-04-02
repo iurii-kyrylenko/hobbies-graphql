@@ -1,4 +1,5 @@
 import { Resolvers } from "./__generated__/resolvers-types";
+import { verifyAuth } from "./auth";
 
 export const resolvers: Resolvers = {
     BookKind: {
@@ -8,11 +9,13 @@ export const resolvers: Resolvers = {
     },
 
     Query: {
-        users: (_parent, _args, { dataSources }) => {
+        users: (_parent, _args, { auth, dataSources }) => {
+            verifyAuth(auth);
             return dataSources.mongoDataSource.getUsers();
         },
 
-        user: (_parent, { id }, { dataSources }) => {
+        user: (_parent, { id }, { auth, dataSources }) => {
+            verifyAuth(auth);
             return dataSources.mongoDataSource.getUser(id);
         },
 
@@ -58,27 +61,33 @@ export const resolvers: Resolvers = {
     },
 
     Mutation: {
-        createBook: (_parent, { bookContent }, { dataSources }) => {
+        createBook: (_parent, { bookContent }, { auth, dataSources }) => {
+            verifyAuth(auth);
             return dataSources.mongoDataSource.createBook(bookContent);
         },
 
-        updateBook: (_parent, { id, bookContent }, { dataSources }) => {
+        updateBook: (_parent, { id, bookContent }, { auth, dataSources }) => {
+            verifyAuth(auth);
             return dataSources.mongoDataSource.updateBook(id, bookContent);
         },
 
-        deleteBook: (_parent, { id }, { dataSources }) => {
+        deleteBook: (_parent, { id }, { auth, dataSources }) => {
+            verifyAuth(auth);
             return dataSources.mongoDataSource.deleteBook(id);
         },
 
-        createMovie: (_parent, { movieContent }, { dataSources }) => {
+        createMovie: (_parent, { movieContent }, { auth, dataSources }) => {
+            verifyAuth(auth);
             return dataSources.mongoDataSource.createMovie(movieContent);
         },
 
-        updateMovie: (_parent, { id, movieContent }, { dataSources }) => {
+        updateMovie: (_parent, { id, movieContent }, { auth, dataSources }) => {
+            verifyAuth(auth);
             return dataSources.mongoDataSource.updateMovie(id, movieContent);
         },
 
-        deleteMovie: (_parent, { id }, { dataSources }) => {
+        deleteMovie: (_parent, { id }, { auth, dataSources }) => {
+            verifyAuth(auth);
             return dataSources.mongoDataSource.deleteMovie(id);
         }
     }

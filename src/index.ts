@@ -6,13 +6,13 @@ import { readFileSync } from "fs";
 import { MongoDataSource } from "./data-sources/mongo";
 import { resolvers } from "./resolvers";
 import { registerModels } from "./models/register-models";
+import { Auth, jwtDecode } from "./auth";
 
 const typeDefs = readFileSync("./schema.graphql", { encoding: "utf-8" });
 
 export interface IContextValue {
-    dataSources: {
-        mongoDataSource: MongoDataSource;
-    };
+    dataSources: { mongoDataSource: MongoDataSource; };
+    auth: Auth;
 }
 
 // dotenv.config();
@@ -33,12 +33,12 @@ const server = new ApolloServer<IContextValue>({
       typeDefs,
       resolvers,
   });
-  
+
 const { url } = await startStandaloneServer(server, {
     listen: { port },
-    context: async () => {
-        // const { cache } = server;
+    context: async ({ req }) => {
         return {
+            auth: jwtDecode(req?.headers?.authorization),
             dataSources: {
                 mongoDataSource: new MongoDataSource(dbConnection),
             },

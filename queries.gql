@@ -184,3 +184,8 @@ mutation DeleteMovie($movieId: ID!) {
     "completed": "2024-04-01",
   },
 }
+
+# Headers
+#
+
+Authorization Bearer ...
