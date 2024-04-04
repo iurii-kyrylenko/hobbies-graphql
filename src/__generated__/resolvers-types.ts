@@ -116,6 +116,7 @@ export type Query = {
   books?: Maybe<Array<Maybe<Book>>>;
   booksNextPage?: Maybe<BookPage>;
   booksPreviousPage?: Maybe<BookPage>;
+  login?: Maybe<Scalars['String']['output']>;
   movie?: Maybe<Movie>;
   movies?: Maybe<Array<Maybe<Movie>>>;
   user?: Maybe<User>;
@@ -144,6 +145,12 @@ export type QueryBooksPreviousPageArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   userId: Scalars['ID']['input'];
+};
+
+
+export type QueryLoginArgs = {
+  name?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -181,8 +188,10 @@ export type UpdateMovieContent = {
 export type User = {
   __typename?: 'User';
   email?: Maybe<Scalars['String']['output']>;
+  hash: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  salt: Scalars['String']['output'];
   shareBooks?: Maybe<Scalars['Boolean']['output']>;
   shareMovies?: Maybe<Scalars['Boolean']['output']>;
 };
@@ -343,6 +352,7 @@ export type QueryResolvers<ContextType = IContextValue, ParentType extends Resol
   books?: Resolver<Maybe<Array<Maybe<ResolversTypes['Book']>>>, ParentType, ContextType, RequireFields<QueryBooksArgs, 'userId'>>;
   booksNextPage?: Resolver<Maybe<ResolversTypes['BookPage']>, ParentType, ContextType, RequireFields<QueryBooksNextPageArgs, 'userId'>>;
   booksPreviousPage?: Resolver<Maybe<ResolversTypes['BookPage']>, ParentType, ContextType, RequireFields<QueryBooksPreviousPageArgs, 'userId'>>;
+  login?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, Partial<QueryLoginArgs>>;
   movie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<QueryMovieArgs, 'id'>>;
   movies?: Resolver<Maybe<Array<Maybe<ResolversTypes['Movie']>>>, ParentType, ContextType, RequireFields<QueryMoviesArgs, 'userId'>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
@@ -351,8 +361,10 @@ export type QueryResolvers<ContextType = IContextValue, ParentType extends Resol
 
 export type UserResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  hash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  salt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   shareBooks?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   shareMovies?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

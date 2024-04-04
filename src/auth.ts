@@ -1,5 +1,12 @@
+import crypto from "crypto";
 import jwt from "jsonwebtoken";
-import { GraphQLError } from "graphql/error/GraphQLError";
+import { throwNotAuth } from "./errors";
+
+interface Claims {
+    sub: string;
+    email: string;
+    name: string;
+}
 
 export interface Auth {
     payload: string | jwt.JwtPayload;
@@ -20,10 +27,15 @@ export const jwtDecode = (token: string): Auth => {
     }
 };
 
+export const jwtEncode = (claims: Claims) => {
+    return jwt.sign(claims, process.env.JWT_SECRET, { expiresIn: "7 days" });
+};
+
 export const verifyAuth = (auth: Auth) => {
     if (!auth.payload) {
-        throw new GraphQLError(`User is not authenticated: ${auth.message}`, {
-            extensions: { code: "UNAUTHENTICATED", http: { status: 401 } },
-        });
-    }
+        throwNotAuth(auth.message)
+    };
 };
+
+export const checkPassword = (password: string, hash: string, salt: string) =>
+    crypto.pbkdf2Sync(password, salt, 1000, 64, "sha1").toString("hex") === hash;

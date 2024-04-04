@@ -3,6 +3,10 @@
 
 ################### USER QUERIES ###################
 
+query login {
+  login(name: "********", password: "********")
+}
+
 query getUsers {
   users {
     id

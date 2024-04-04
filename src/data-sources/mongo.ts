@@ -29,6 +29,10 @@ export class MongoDataSource {
         return this.UserModel.findById(id);
     }
 
+    async findUserbyName(name: string) {
+        return this.UserModel.findOne({ name });
+    }
+
     async getBooks(userId: string) {
         return this.BookModel.find({ userId }).sort({ _id: -1 });
     }

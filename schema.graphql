@@ -10,6 +10,8 @@ type User {
     id: ID!
     email: String
     name: String!
+    hash: String!
+    salt: String!
     shareBooks: Boolean
     shareMovies: Boolean
 }
@@ -75,6 +77,7 @@ input UpdateMovieContent {
 type Query {
     users: [User]!
     user(id: ID!): User
+    login(name: String, password: String): String
 
     books(userId: ID!): [Book]
     book(id: ID!): Book

@@ -1,5 +1,6 @@
 import { Resolvers } from "./__generated__/resolvers-types";
-import { verifyAuth } from "./auth";
+import { checkPassword, jwtEncode, verifyAuth } from "./auth";
+import { throwNotAuth, throwNotFound } from "./errors";
 
 export const resolvers: Resolvers = {
     BookKind: {
@@ -17,6 +18,19 @@ export const resolvers: Resolvers = {
         user: (_parent, { id }, { auth, dataSources }) => {
             verifyAuth(auth);
             return dataSources.mongoDataSource.getUser(id);
+        },
+
+        login: async (_parent, { name, password }, { dataSources }) => {
+            const user = await dataSources.mongoDataSource.findUserbyName(name);
+            if (!user) {
+                throwNotFound(`User "${name}" not found`);
+            }
+            const { id, email, hash, salt } = user;
+            if (checkPassword(password, hash, salt)) {
+                return jwtEncode({ sub: id, email, name });
+            } else {
+                throwNotAuth("Invalid password");
+            }
         },
 
         books: (_parent, { userId }, { dataSources }) => {
