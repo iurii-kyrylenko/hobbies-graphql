@@ -1,6 +1,6 @@
 import { Resolvers } from "./__generated__/resolvers-types";
-import { checkPassword, jwtEncode, verifyAuth } from "./auth";
-import { throwNotAuth, throwNotFound } from "./errors";
+import { checkPassword, jwtEncode, verifyAuth } from "./auth.js";
+import { throwNotAuth, throwNotFound } from "./errors.js";
 
 export const resolvers: Resolvers = {
     BookKind: {

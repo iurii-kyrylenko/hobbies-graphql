@@ -1,6 +1,6 @@
-import { registerUserModel } from "./user";
-import { registerBookModel } from "./book";
-import { registerMovieModel } from "./movie";
+import { registerUserModel } from "./user.js";
+import { registerBookModel } from "./book.js";
+import { registerMovieModel } from "./movie.js";
 
 export const registerModels = () => {
     registerUserModel();

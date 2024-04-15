@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
-import { throwNotAuth } from "./errors";
+import { throwNotAuth } from "./errors.js";
 
 interface Claims {
     sub: string;

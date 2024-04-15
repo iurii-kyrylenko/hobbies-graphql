@@ -3,10 +3,10 @@ import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { Mongoose, connect } from "mongoose";
 import { readFileSync } from "fs";
-import { MongoDataSource } from "./data-sources/mongo";
-import { resolvers } from "./resolvers";
-import { registerModels } from "./models/register-models";
-import { Auth, jwtDecode } from "./auth";
+import { MongoDataSource } from "./data-sources/mongo.js";
+import { resolvers } from "./resolvers.js";
+import { registerModels } from "./models/register-models.js";
+import { Auth, jwtDecode } from "./auth.js";
 
 const typeDefs = readFileSync("./schema.graphql", { encoding: "utf-8" });
 

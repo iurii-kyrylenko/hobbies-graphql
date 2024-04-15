@@ -6,7 +6,7 @@
     "scripts": {
         "generate": "graphql-codegen --config codegen.yml",
         "compile": "tsc",
-        "start": "npm run compile && NODE_OPTIONS='--experimental-specifier-resolution=node' node ./dist/index.js"
+        "start": "npm run compile && node ./dist/index.js"
     },
     "keywords": [],
     "author": "",
