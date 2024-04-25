@@ -33,8 +33,8 @@ export const resolvers: Resolvers = {
             }
         },
 
-        books: (_parent, { userId }, { dataSources }) => {
-            return dataSources.mongoDataSource.getBooks(userId);
+        books: (_parent, { userId, search }, { dataSources }) => {
+            return dataSources.mongoDataSource.getBooks(userId, search);
         },
 
         book: (_parent, { id }, { dataSources }) => {
@@ -65,8 +65,8 @@ export const resolvers: Resolvers = {
             return { books: books.reverse(), cursor };
         },
 
-        movies: (_parent, { userId }, { dataSources }) => {
-            return dataSources.mongoDataSource.getMovies(userId);
+        movies: (_parent, { userId, search }, { dataSources }) => {
+            return dataSources.mongoDataSource.getMovies(userId, search);
         },
 
         movie: (_parent, { id }, { dataSources }) => {

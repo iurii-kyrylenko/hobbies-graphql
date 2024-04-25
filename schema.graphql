@@ -79,12 +79,12 @@ type Query {
     user(id: ID!): User
     login(name: String, password: String): String
 
-    books(userId: ID!): [Book]
+    books(userId: ID!, search: String): [Book]
     book(id: ID!): Book
     booksNextPage(userId: ID!, first: Int, after: String): BookPage
     booksPreviousPage(userId: ID!, last: Int, before: String): BookPage
 
-    movies(userId: ID!): [Movie]
+    movies(userId: ID!, search: String): [Movie]
     movie(id: ID!): Movie
 }
 

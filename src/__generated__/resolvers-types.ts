@@ -130,6 +130,7 @@ export type QueryBookArgs = {
 
 
 export type QueryBooksArgs = {
+  search?: InputMaybe<Scalars['String']['input']>;
   userId: Scalars['ID']['input'];
 };
 
@@ -160,6 +161,7 @@ export type QueryMovieArgs = {
 
 
 export type QueryMoviesArgs = {
+  search?: InputMaybe<Scalars['String']['input']>;
   userId: Scalars['ID']['input'];
 };
 

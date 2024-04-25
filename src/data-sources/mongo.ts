@@ -33,8 +33,9 @@ export class MongoDataSource {
         return this.UserModel.findOne({ name });
     }
 
-    async getBooks(userId: string) {
-        return this.BookModel.find({ userId }).sort({ _id: -1 });
+    async getBooks(userId: string, search: string) {
+        const searchExpr = getSearchExpr(["author", "title"], search);
+        return this.BookModel.find({ userId }).sort({ _id: -1 }).or(searchExpr);
     }
 
     async getBooksNextPage(userId: string, pageSize: number, cursor: string) {
@@ -65,8 +66,9 @@ export class MongoDataSource {
         return this.BookModel.findByIdAndDelete(id);
     }
 
-    async getMovies(userId: string) {
-        return this.MovieModel.find({ userId }).sort({ _id: -1 });
+    async getMovies(userId: string, search: string) {
+        const searchExpr = getSearchExpr(["title", "year", "notes"], search);
+        return this.MovieModel.find({ userId }).sort({ _id: -1 }).or(searchExpr);
     }
 
     async getMovie(id: string) {
@@ -85,3 +87,6 @@ export class MongoDataSource {
         return this.MovieModel.findByIdAndDelete(id);
     }
 }
+
+const getSearchExpr = (fields: string[], search: string) =>
+    fields.map((field) => ({ [field]: { $regex: new RegExp(search, 'i') }}));
