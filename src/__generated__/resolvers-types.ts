@@ -68,6 +68,14 @@ export type Movie = {
   year: Scalars['String']['output'];
 };
 
+export type MovieInfo = {
+  __typename?: 'MovieInfo';
+  found?: Maybe<Scalars['Boolean']['output']>;
+  id: Scalars['ID']['output'];
+  plot?: Maybe<Scalars['String']['output']>;
+  poster?: Maybe<Scalars['String']['output']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createBook?: Maybe<Book>;
@@ -118,6 +126,7 @@ export type Query = {
   booksPreviousPage?: Maybe<BookPage>;
   login?: Maybe<Scalars['String']['output']>;
   movie?: Maybe<Movie>;
+  movieInfo?: Maybe<MovieInfo>;
   movies?: Maybe<Array<Maybe<Movie>>>;
   user?: Maybe<User>;
   users: Array<Maybe<User>>;
@@ -156,6 +165,11 @@ export type QueryLoginArgs = {
 
 
 export type QueryMovieArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryMovieInfoArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -280,6 +294,7 @@ export type ResolversTypes = ResolversObject<{
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Movie: ResolverTypeWrapper<Movie>;
+  MovieInfo: ResolverTypeWrapper<MovieInfo>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -299,6 +314,7 @@ export type ResolversParentTypes = ResolversObject<{
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   Movie: Movie;
+  MovieInfo: MovieInfo;
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
@@ -340,6 +356,14 @@ export type MovieResolvers<ContextType = IContextValue, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type MovieInfoResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['MovieInfo'] = ResolversParentTypes['MovieInfo']> = ResolversObject<{
+  found?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  plot?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  poster?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type MutationResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationCreateBookArgs, 'bookContent'>>;
   createMovie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<MutationCreateMovieArgs, 'movieContent'>>;
@@ -356,6 +380,7 @@ export type QueryResolvers<ContextType = IContextValue, ParentType extends Resol
   booksPreviousPage?: Resolver<Maybe<ResolversTypes['BookPage']>, ParentType, ContextType, RequireFields<QueryBooksPreviousPageArgs, 'userId'>>;
   login?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, Partial<QueryLoginArgs>>;
   movie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<QueryMovieArgs, 'id'>>;
+  movieInfo?: Resolver<Maybe<ResolversTypes['MovieInfo']>, ParentType, ContextType, RequireFields<QueryMovieInfoArgs, 'id'>>;
   movies?: Resolver<Maybe<Array<Maybe<ResolversTypes['Movie']>>>, ParentType, ContextType, RequireFields<QueryMoviesArgs, 'userId'>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   users?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>;
@@ -378,6 +403,7 @@ export type Resolvers<ContextType = IContextValue> = ResolversObject<{
   BookPage?: BookPageResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Movie?: MovieResolvers<ContextType>;
+  MovieInfo?: MovieInfoResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;

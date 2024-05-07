@@ -4,14 +4,18 @@ import { startStandaloneServer } from "@apollo/server/standalone";
 import { Mongoose, connect } from "mongoose";
 import { readFileSync } from "fs";
 import { MongoDataSource } from "./data-sources/mongo.js";
-import { resolvers } from "./resolvers.js";
+import { resolvers } from "./resolvers/index.js";
 import { registerModels } from "./models/register-models.js";
 import { Auth, jwtDecode } from "./auth.js";
+import { MoviesAPI } from "./data-sources/movies-api.js";
 
 const typeDefs = readFileSync("./schema.graphql", { encoding: "utf-8" });
 
 export interface IContextValue {
-    dataSources: { mongoDataSource: MongoDataSource; };
+    dataSources: {
+        mongoDataSource: MongoDataSource;
+        moviesAPI: MoviesAPI;
+    };
     auth: Auth;
 }
 
@@ -41,6 +45,7 @@ const { url } = await startStandaloneServer(server, {
             auth: jwtDecode(req?.headers?.authorization),
             dataSources: {
                 mongoDataSource: new MongoDataSource(dbConnection),
+                moviesAPI: new MoviesAPI({ cache: server.cache }),
             },
         }
     }

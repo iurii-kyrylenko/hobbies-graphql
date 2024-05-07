@@ -56,6 +56,13 @@ type Movie {
     imdbId: String
 }
 
+type MovieInfo {
+    id: ID!
+    found: Boolean
+    plot: String
+    poster: String
+}
+
 input CreateMovieContent {
     userId: ID!
     title: String!
@@ -86,6 +93,8 @@ type Query {
 
     movies(userId: ID!, search: String): [Movie]
     movie(id: ID!): Movie
+
+    movieInfo(id: ID!): MovieInfo
 }
 
 type Mutation {
