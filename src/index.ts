@@ -1,4 +1,7 @@
-import dotenv from "dotenv";
+// Uncomment for local environment:
+// import dotenv from "dotenv";
+// dotenv.config();
+
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { Mongoose, connect } from "mongoose";
@@ -19,8 +22,6 @@ export interface IContextValue {
     auth: Auth;
 }
 
-// dotenv.config();
-dotenv.config({ path: ".env.local" });
 const dbConnectionString = process.env.CONNECTION_STRING;
 const port = +process.env.PORT;
 
