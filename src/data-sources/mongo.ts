@@ -19,37 +19,28 @@ export class MongoDataSource {
         this.MovieModel = dbConnection.model("Movie");
     }
 
-    async getUsers() {
-        return this.UserModel.find();
-    }
-
-    async getUser(id: string) {
-        return this.UserModel.findById(id);
+    async getPeople() {
+        return this.UserModel.aggregate()
+            .match({ $or: [{ shareBooks: true }, { shareMovies: true }] })
+            .lookup({ from: "books", localField: "_id", foreignField: "userId", as: "books" })
+            .lookup({ from: "movies", localField: "_id", foreignField: "userId", as: "movies" })
+            .project({
+                id: "$_id",
+                name: 1,
+                books: { $size: "$books" },
+                movies: { $size: "$movies" },
+                total: { $add: [{ $size: '$books' }, { $size: '$movies' }] }
+              })
+              .match({ total: { $gt: 0 } })
+              .sort({ total: -1, name: 1 });
     }
 
     async findUserbyName(name: string) {
         return this.UserModel.findOne({ name });
     }
-
-    async getBooks(userId: string, search: string) {
-        const searchExpr = getSearchExpr(["author", "title"], search);
-        return this.BookModel.find({ userId }).sort({ _id: -1 }).or(searchExpr);
-    }
-
-    async getBooksNextPage(userId: string, pageSize: number, cursor: string) {
-        const condition = cursor ? { _id: { $lt: cursor } } : {};
-        const query = this.BookModel.find({ userId, ...condition }).sort({ _id: -1 });
-        return pageSize ? query.limit(pageSize) : query;
-    }
-
-    async getBooksPreviousPage(userId: string, pageSize: number, cursor: string) {
-        const condition = cursor ? { _id: { $gt: cursor } } : {};
-        const query = this.BookModel.find({ userId, ...condition }).sort({ _id: 1 });
-        return pageSize ? query.limit(pageSize) : query;
-    }
-
-    async getBook(id: string) {
-        return this.BookModel.findById(id);
+    
+    async getBooks(userId: string) {
+        return this.BookModel.find({ userId }).sort({ _id: -1 });
     }
 
     async createBook(userId: string, bookContent: BookContent) {
@@ -64,13 +55,8 @@ export class MongoDataSource {
         return this.BookModel.findByIdAndDelete(id);
     }
 
-    async getMovies(userId: string, search: string) {
-        const searchExpr = getSearchExpr(["title", "year", "notes"], search);
-        return this.MovieModel.find({ userId }).sort({ _id: -1 }).or(searchExpr);
-    }
-
-    async getMovie(id: string) {
-        return this.MovieModel.findById(id);
+    async getMovies(userId: string) {
+        return this.MovieModel.find({ userId }).sort({ _id: -1 });
     }
 
     async createMovie(userId: string, movieContent: MovieContent) {
@@ -85,6 +71,3 @@ export class MongoDataSource {
         return this.MovieModel.findByIdAndDelete(id);
     }
 }
-
-const getSearchExpr = (fields: string[], search: string) =>
-    fields.map((field) => ({ [field]: { $regex: new RegExp(search, 'i') }}));

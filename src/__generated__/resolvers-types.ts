@@ -41,12 +41,6 @@ export enum BookKind {
   Regular = 'r'
 }
 
-export type BookPage = {
-  __typename?: 'BookPage';
-  books?: Maybe<Array<Maybe<Book>>>;
-  cursor?: Maybe<Scalars['String']['output']>;
-};
-
 export type Movie = {
   __typename?: 'Movie';
   completed: Scalars['Date']['output'];
@@ -124,40 +118,15 @@ export type MutationUpdateMovieArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  book?: Maybe<Book>;
   books?: Maybe<Array<Maybe<Book>>>;
-  booksNextPage?: Maybe<BookPage>;
-  booksPreviousPage?: Maybe<BookPage>;
   login?: Maybe<Scalars['String']['output']>;
-  movie?: Maybe<Movie>;
   movieInfo?: Maybe<MovieInfo>;
   movies?: Maybe<Array<Maybe<Movie>>>;
-  user?: Maybe<User>;
-  users: Array<Maybe<User>>;
-};
-
-
-export type QueryBookArgs = {
-  id: Scalars['ID']['input'];
+  people?: Maybe<Array<Maybe<UserStats>>>;
 };
 
 
 export type QueryBooksArgs = {
-  search?: InputMaybe<Scalars['String']['input']>;
-  userId: Scalars['ID']['input'];
-};
-
-
-export type QueryBooksNextPageArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  userId: Scalars['ID']['input'];
-};
-
-
-export type QueryBooksPreviousPageArgs = {
-  before?: InputMaybe<Scalars['String']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
   userId: Scalars['ID']['input'];
 };
 
@@ -168,24 +137,13 @@ export type QueryLoginArgs = {
 };
 
 
-export type QueryMovieArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
 export type QueryMovieInfoArgs = {
   id: Scalars['ID']['input'];
 };
 
 
 export type QueryMoviesArgs = {
-  search?: InputMaybe<Scalars['String']['input']>;
   userId: Scalars['ID']['input'];
-};
-
-
-export type QueryUserArgs = {
-  id: Scalars['ID']['input'];
 };
 
 export type User = {
@@ -197,6 +155,15 @@ export type User = {
   salt: Scalars['String']['output'];
   shareBooks?: Maybe<Scalars['Boolean']['output']>;
   shareMovies?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type UserStats = {
+  __typename?: 'UserStats';
+  books: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  movies: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  total: Scalars['Int']['output'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -274,7 +241,6 @@ export type ResolversTypes = ResolversObject<{
   Book: ResolverTypeWrapper<Book>;
   BookContent: BookContent;
   BookKind: BookKind;
-  BookPage: ResolverTypeWrapper<BookPage>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Date: ResolverTypeWrapper<Scalars['Date']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
@@ -286,13 +252,13 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<User>;
+  UserStats: ResolverTypeWrapper<UserStats>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Book: Book;
   BookContent: BookContent;
-  BookPage: BookPage;
   Boolean: Scalars['Boolean']['output'];
   Date: Scalars['Date']['output'];
   ID: Scalars['ID']['output'];
@@ -304,6 +270,7 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   String: Scalars['String']['output'];
   User: User;
+  UserStats: UserStats;
 }>;
 
 export type BookResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['Book'] = ResolversParentTypes['Book']> = ResolversObject<{
@@ -317,12 +284,6 @@ export type BookResolvers<ContextType = IContextValue, ParentType extends Resolv
 }>;
 
 export type BookKindResolvers = { AUDIO: 'a', MIXED: 'r-a', REGULAR: 'r' };
-
-export type BookPageResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['BookPage'] = ResolversParentTypes['BookPage']> = ResolversObject<{
-  books?: Resolver<Maybe<Array<Maybe<ResolversTypes['Book']>>>, ParentType, ContextType>;
-  cursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date';
@@ -357,16 +318,11 @@ export type MutationResolvers<ContextType = IContextValue, ParentType extends Re
 }>;
 
 export type QueryResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  book?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QueryBookArgs, 'id'>>;
   books?: Resolver<Maybe<Array<Maybe<ResolversTypes['Book']>>>, ParentType, ContextType, RequireFields<QueryBooksArgs, 'userId'>>;
-  booksNextPage?: Resolver<Maybe<ResolversTypes['BookPage']>, ParentType, ContextType, RequireFields<QueryBooksNextPageArgs, 'userId'>>;
-  booksPreviousPage?: Resolver<Maybe<ResolversTypes['BookPage']>, ParentType, ContextType, RequireFields<QueryBooksPreviousPageArgs, 'userId'>>;
   login?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, Partial<QueryLoginArgs>>;
-  movie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<QueryMovieArgs, 'id'>>;
   movieInfo?: Resolver<Maybe<ResolversTypes['MovieInfo']>, ParentType, ContextType, RequireFields<QueryMovieInfoArgs, 'id'>>;
   movies?: Resolver<Maybe<Array<Maybe<ResolversTypes['Movie']>>>, ParentType, ContextType, RequireFields<QueryMoviesArgs, 'userId'>>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
-  users?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>;
+  people?: Resolver<Maybe<Array<Maybe<ResolversTypes['UserStats']>>>, ParentType, ContextType>;
 }>;
 
 export type UserResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
@@ -380,15 +336,24 @@ export type UserResolvers<ContextType = IContextValue, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type UserStatsResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['UserStats'] = ResolversParentTypes['UserStats']> = ResolversObject<{
+  books?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  movies?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = IContextValue> = ResolversObject<{
   Book?: BookResolvers<ContextType>;
   BookKind?: BookKindResolvers;
-  BookPage?: BookPageResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Movie?: MovieResolvers<ContextType>;
   MovieInfo?: MovieInfoResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  UserStats?: UserStatsResolvers<ContextType>;
 }>;
 
