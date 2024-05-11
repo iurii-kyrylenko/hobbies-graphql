@@ -28,6 +28,13 @@ export type Book = {
   userId: Scalars['ID']['output'];
 };
 
+export type BookContent = {
+  author: Scalars['String']['input'];
+  completed: Scalars['Date']['input'];
+  mode: BookKind;
+  title: Scalars['String']['input'];
+};
+
 export enum BookKind {
   Audio = 'a',
   Mixed = 'r-a',
@@ -40,23 +47,6 @@ export type BookPage = {
   cursor?: Maybe<Scalars['String']['output']>;
 };
 
-export type CreateBookContent = {
-  author: Scalars['String']['input'];
-  completed: Scalars['Date']['input'];
-  mode: BookKind;
-  title: Scalars['String']['input'];
-  userId: Scalars['ID']['input'];
-};
-
-export type CreateMovieContent = {
-  completed: Scalars['Date']['input'];
-  imdbId?: InputMaybe<Scalars['String']['input']>;
-  notes?: InputMaybe<Scalars['String']['input']>;
-  title: Scalars['String']['input'];
-  userId: Scalars['ID']['input'];
-  year: Scalars['String']['input'];
-};
-
 export type Movie = {
   __typename?: 'Movie';
   completed: Scalars['Date']['output'];
@@ -66,6 +56,14 @@ export type Movie = {
   title: Scalars['String']['output'];
   userId: Scalars['ID']['output'];
   year: Scalars['String']['output'];
+};
+
+export type MovieContent = {
+  completed: Scalars['Date']['input'];
+  imdbId?: InputMaybe<Scalars['String']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
+  year: Scalars['String']['input'];
 };
 
 export type MovieInfo = {
@@ -88,34 +86,40 @@ export type Mutation = {
 
 
 export type MutationCreateBookArgs = {
-  bookContent: CreateBookContent;
+  bookContent: BookContent;
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationCreateMovieArgs = {
-  movieContent: CreateMovieContent;
+  movieContent: MovieContent;
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationDeleteBookArgs = {
   id: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationDeleteMovieArgs = {
   id: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationUpdateBookArgs = {
-  bookContent: UpdateBookContent;
+  bookContent: BookContent;
   id: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationUpdateMovieArgs = {
   id: Scalars['ID']['input'];
-  movieContent: UpdateMovieContent;
+  movieContent: MovieContent;
+  userId: Scalars['ID']['input'];
 };
 
 export type Query = {
@@ -182,23 +186,6 @@ export type QueryMoviesArgs = {
 
 export type QueryUserArgs = {
   id: Scalars['ID']['input'];
-};
-
-export type UpdateBookContent = {
-  author?: InputMaybe<Scalars['String']['input']>;
-  completed?: InputMaybe<Scalars['Date']['input']>;
-  mode?: InputMaybe<BookKind>;
-  title?: InputMaybe<Scalars['String']['input']>;
-  userId?: InputMaybe<Scalars['ID']['input']>;
-};
-
-export type UpdateMovieContent = {
-  completed?: InputMaybe<Scalars['Date']['input']>;
-  imdbId?: InputMaybe<Scalars['String']['input']>;
-  notes?: InputMaybe<Scalars['String']['input']>;
-  title?: InputMaybe<Scalars['String']['input']>;
-  userId?: InputMaybe<Scalars['ID']['input']>;
-  year?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -285,41 +272,37 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Book: ResolverTypeWrapper<Book>;
+  BookContent: BookContent;
   BookKind: BookKind;
   BookPage: ResolverTypeWrapper<BookPage>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
-  CreateBookContent: CreateBookContent;
-  CreateMovieContent: CreateMovieContent;
   Date: ResolverTypeWrapper<Scalars['Date']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Movie: ResolverTypeWrapper<Movie>;
+  MovieContent: MovieContent;
   MovieInfo: ResolverTypeWrapper<MovieInfo>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
-  UpdateBookContent: UpdateBookContent;
-  UpdateMovieContent: UpdateMovieContent;
   User: ResolverTypeWrapper<User>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Book: Book;
+  BookContent: BookContent;
   BookPage: BookPage;
   Boolean: Scalars['Boolean']['output'];
-  CreateBookContent: CreateBookContent;
-  CreateMovieContent: CreateMovieContent;
   Date: Scalars['Date']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   Movie: Movie;
+  MovieContent: MovieContent;
   MovieInfo: MovieInfo;
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
-  UpdateBookContent: UpdateBookContent;
-  UpdateMovieContent: UpdateMovieContent;
   User: User;
 }>;
 
@@ -365,12 +348,12 @@ export type MovieInfoResolvers<ContextType = IContextValue, ParentType extends R
 }>;
 
 export type MutationResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  createBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationCreateBookArgs, 'bookContent'>>;
-  createMovie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<MutationCreateMovieArgs, 'movieContent'>>;
-  deleteBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationDeleteBookArgs, 'id'>>;
-  deleteMovie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<MutationDeleteMovieArgs, 'id'>>;
-  updateBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationUpdateBookArgs, 'bookContent' | 'id'>>;
-  updateMovie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<MutationUpdateMovieArgs, 'id' | 'movieContent'>>;
+  createBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationCreateBookArgs, 'bookContent' | 'userId'>>;
+  createMovie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<MutationCreateMovieArgs, 'movieContent' | 'userId'>>;
+  deleteBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationDeleteBookArgs, 'id' | 'userId'>>;
+  deleteMovie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<MutationDeleteMovieArgs, 'id' | 'userId'>>;
+  updateBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationUpdateBookArgs, 'bookContent' | 'id' | 'userId'>>;
+  updateMovie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<MutationUpdateMovieArgs, 'id' | 'movieContent' | 'userId'>>;
 }>;
 
 export type QueryResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{

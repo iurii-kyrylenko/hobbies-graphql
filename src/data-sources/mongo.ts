@@ -4,10 +4,8 @@ import {
     Book,
     Movie,
     User,
-    CreateBookContent,
-    UpdateBookContent,
-    CreateMovieContent,
-    UpdateMovieContent,
+    BookContent,
+    MovieContent,
 } from "../__generated__/resolvers-types";
 
 export class MongoDataSource {
@@ -54,11 +52,11 @@ export class MongoDataSource {
         return this.BookModel.findById(id);
     }
 
-    async createBook(bookContent: CreateBookContent) {
-        return this.BookModel.create(bookContent);
+    async createBook(userId: string, bookContent: BookContent) {
+        return this.BookModel.create({ userId, ...bookContent });
     }
 
-    async updateBook(id: string, bookContent: UpdateBookContent) {
+    async updateBook(id: string, bookContent: BookContent) {
         return this.BookModel.findByIdAndUpdate(id, bookContent, { returnDocument: "after" });
     }
 
@@ -75,11 +73,11 @@ export class MongoDataSource {
         return this.MovieModel.findById(id);
     }
 
-    async createMovie(movieContent: CreateMovieContent) {
-        return this.MovieModel.create(movieContent);
+    async createMovie(userId: string, movieContent: MovieContent) {
+        return this.MovieModel.create({ userId, ...movieContent });
     }
 
-    async updateMovie(id: string, movieContent: UpdateMovieContent) {
+    async updateMovie(id: string, movieContent: MovieContent) {
         return this.MovieModel.findByIdAndUpdate(id, movieContent, { returnDocument: "after" });
     }
 

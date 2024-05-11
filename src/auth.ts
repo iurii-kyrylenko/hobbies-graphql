@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
-import { throwNotAuth } from "./errors.js";
+import { throwForbidden, throwNotAuth } from "./errors.js";
 
 interface Claims {
     sub: string;
@@ -31,9 +31,12 @@ export const jwtEncode = (claims: Claims) => {
     return jwt.sign(claims, process.env.JWT_SECRET, { expiresIn: "7 days" });
 };
 
-export const verifyAuth = (auth: Auth) => {
+export const verifyAuth = (auth: Auth, userId: string) => {
     if (!auth.payload) {
-        throwNotAuth(auth.message)
+        throwNotAuth(auth.message);
+    };
+    if (auth.payload.sub !== userId) {
+        throwForbidden("Access denied");
     };
 };
 

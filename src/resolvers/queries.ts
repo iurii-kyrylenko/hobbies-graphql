@@ -5,12 +5,12 @@ import { throwNotAuth, throwNotFound } from "../errors.js";
 
 export const queriesResolver: QueryResolvers<IContextValue, {}> = {
     users: (_parent, _args, { auth, dataSources }) => {
-        verifyAuth(auth);
+        verifyAuth(auth, "");
         return dataSources.mongoDataSource.getUsers();
     },
 
     user: (_parent, { id }, { auth, dataSources }) => {
-        verifyAuth(auth);
+        verifyAuth(auth, "");
         return dataSources.mongoDataSource.getUser(id);
     },
 

@@ -30,22 +30,12 @@ type BookPage {
     cursor: String
 }
 
-input CreateBookContent {
-    userId: ID!
+input BookContent {
     title: String!
     author: String!
     mode: BookKind!
     completed: Date!
 }
-
-input UpdateBookContent {
-    userId: ID
-    title: String
-    author: String
-    mode: BookKind
-    completed: Date
-}
-
 type Movie {
     id: ID!
     userId: ID!
@@ -63,21 +53,11 @@ type MovieInfo {
     poster: String
 }
 
-input CreateMovieContent {
-    userId: ID!
+input MovieContent {
     title: String!
     year: String!
     notes: String
     completed: Date!
-    imdbId: String
-}
-
-input UpdateMovieContent {
-    userId: ID
-    title: String
-    year: String
-    notes: String
-    completed: Date
     imdbId: String
 }
 
@@ -98,11 +78,11 @@ type Query {
 }
 
 type Mutation {
-    createBook(bookContent: CreateBookContent!): Book
-    updateBook(id: ID!, bookContent: UpdateBookContent!): Book
-    deleteBook(id: ID!): Book
+    createBook(userId: ID!, bookContent: BookContent!): Book
+    updateBook(id: ID!, userId: ID!, bookContent: BookContent!): Book
+    deleteBook(id: ID!, userId: ID!): Book
 
-    createMovie(movieContent: CreateMovieContent!): Movie
-    updateMovie(id: ID!, movieContent: UpdateMovieContent!): Movie
-    deleteMovie(id: ID!): Movie
+    createMovie(userId: ID!, movieContent: MovieContent!): Movie
+    updateMovie(id: ID!, userId: ID!, movieContent: MovieContent!): Movie
+    deleteMovie(id: ID!, userId: ID!): Movie
 }

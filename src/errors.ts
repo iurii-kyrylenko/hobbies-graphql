@@ -1,8 +1,14 @@
 import { GraphQLError } from "graphql/error/GraphQLError.js";
 
 export const throwNotAuth = (message: string) => {
-    throw new GraphQLError(`User is not authenticated: ${message}`, {
-        extensions: { code: "UNAUTHENTICATED", http: { status: 401 } },
+    throw new GraphQLError(`User is not authorized: ${message}`, {
+        extensions: { code: "UNAUTHORIZED", http: { status: 401 } },
+    });
+};
+
+export const throwForbidden = (message: string) => {
+    throw new GraphQLError(`User is forbidden: ${message}`, {
+        extensions: { code: "FORBIDDEN", http: { status: 403 } },
     });
 };
 
