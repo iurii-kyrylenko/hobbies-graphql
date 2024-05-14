@@ -11,6 +11,7 @@ import { resolvers } from "./resolvers/index.js";
 import { registerModels } from "./models/register-models.js";
 import { Auth, jwtDecode } from "./auth.js";
 import { MoviesAPI } from "./data-sources/movies-api.js";
+import { CaptchaAPI } from "./data-sources/captcha-api.js";
 
 const typeDefs = readFileSync("./schema.graphql", { encoding: "utf-8" });
 
@@ -18,6 +19,7 @@ export interface IContextValue {
     dataSources: {
         mongoDataSource: MongoDataSource;
         moviesAPI: MoviesAPI;
+        captchaApi: CaptchaAPI
     };
     auth: Auth;
 }
@@ -47,6 +49,7 @@ const { url } = await startStandaloneServer(server, {
             dataSources: {
                 mongoDataSource: new MongoDataSource(dbConnection),
                 moviesAPI: new MoviesAPI({ cache: server.cache }),
+                captchaApi: new CaptchaAPI(),
             },
         }
     }

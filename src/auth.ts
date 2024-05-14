@@ -42,3 +42,9 @@ export const verifyAuth = (auth: Auth, userId: string) => {
 
 export const checkPassword = (password: string, hash: string, salt: string) =>
     crypto.pbkdf2Sync(password, salt, 1000, 64, "sha1").toString("hex") === hash;
+
+export const hashPassword = (password: string) => {
+    const salt = crypto.randomBytes(16).toString("hex");
+    const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, "sha1").toString("hex");
+    return { salt, hash };
+};

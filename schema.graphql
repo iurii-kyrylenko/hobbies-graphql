@@ -8,7 +8,7 @@ enum BookKind {
 
 type User {
     id: ID!
-    email: String
+    email: String!
     name: String!
     hash: String!
     salt: String!
@@ -22,6 +22,12 @@ type UserStats {
     books: Int!
     movies: Int!
     total: Int!
+}
+
+input UserData {
+    name: String!
+    email: String!
+    password: String!
 }
 
 type Book {
@@ -73,6 +79,7 @@ type Query {
 }
 
 type Mutation {
+    register(captchaToken: String!, userData: UserData!): String
     createBook(userId: ID!, bookContent: BookContent!): Book
     updateBook(id: ID!, userId: ID!, bookContent: BookContent!): Book
     deleteBook(id: ID!, userId: ID!): Book

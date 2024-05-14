@@ -74,6 +74,7 @@ export type Mutation = {
   createMovie?: Maybe<Movie>;
   deleteBook?: Maybe<Book>;
   deleteMovie?: Maybe<Movie>;
+  register?: Maybe<Scalars['String']['output']>;
   updateBook?: Maybe<Book>;
   updateMovie?: Maybe<Movie>;
 };
@@ -100,6 +101,12 @@ export type MutationDeleteBookArgs = {
 export type MutationDeleteMovieArgs = {
   id: Scalars['ID']['input'];
   userId: Scalars['ID']['input'];
+};
+
+
+export type MutationRegisterArgs = {
+  captchaToken: Scalars['String']['input'];
+  userData: UserData;
 };
 
 
@@ -148,13 +155,19 @@ export type QueryMoviesArgs = {
 
 export type User = {
   __typename?: 'User';
-  email?: Maybe<Scalars['String']['output']>;
+  email: Scalars['String']['output'];
   hash: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   salt: Scalars['String']['output'];
   shareBooks?: Maybe<Scalars['Boolean']['output']>;
   shareMovies?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type UserData = {
+  email: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type UserStats = {
@@ -252,6 +265,7 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<User>;
+  UserData: UserData;
   UserStats: ResolverTypeWrapper<UserStats>;
 }>;
 
@@ -270,6 +284,7 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   String: Scalars['String']['output'];
   User: User;
+  UserData: UserData;
   UserStats: UserStats;
 }>;
 
@@ -313,6 +328,7 @@ export type MutationResolvers<ContextType = IContextValue, ParentType extends Re
   createMovie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<MutationCreateMovieArgs, 'movieContent' | 'userId'>>;
   deleteBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationDeleteBookArgs, 'id' | 'userId'>>;
   deleteMovie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<MutationDeleteMovieArgs, 'id' | 'userId'>>;
+  register?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'captchaToken' | 'userData'>>;
   updateBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationUpdateBookArgs, 'bookContent' | 'id' | 'userId'>>;
   updateMovie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<MutationUpdateMovieArgs, 'id' | 'movieContent' | 'userId'>>;
 }>;
@@ -326,7 +342,7 @@ export type QueryResolvers<ContextType = IContextValue, ParentType extends Resol
 }>;
 
 export type UserResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
-  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   hash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

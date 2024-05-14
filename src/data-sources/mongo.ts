@@ -6,7 +6,9 @@ import {
     User,
     BookContent,
     MovieContent,
+    UserData,
 } from "../__generated__/resolvers-types";
+import { hashPassword } from "../auth.js";
 
 export class MongoDataSource {
     private UserModel: Model<User>;
@@ -38,7 +40,22 @@ export class MongoDataSource {
     async findUserbyName(name: string) {
         return this.UserModel.findOne({ name });
     }
-    
+
+    async findUserbyNameOrEmail(name: string, email: string) {
+        return this.UserModel.findOne({ $or: [{ name }, { email }] });
+    }
+
+    async createUser(userData: UserData) {
+        const hashData = hashPassword(userData.password);
+        return await this.UserModel.create({
+            name: userData.name,
+            email: userData.email,
+            shareBooks: true,
+            shareMovies: true,
+            ...hashData,
+        });
+    };
+
     async getBooks(userId: string) {
         return this.BookModel.find({ userId }).sort({ _id: -1 });
     }
