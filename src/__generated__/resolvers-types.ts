@@ -77,6 +77,7 @@ export type Mutation = {
   register?: Maybe<Scalars['String']['output']>;
   updateBook?: Maybe<Book>;
   updateMovie?: Maybe<Movie>;
+  updateUser?: Maybe<User>;
 };
 
 
@@ -106,7 +107,7 @@ export type MutationDeleteMovieArgs = {
 
 export type MutationRegisterArgs = {
   captchaToken: Scalars['String']['input'];
-  userData: UserData;
+  registerData: RegisterData;
 };
 
 
@@ -123,6 +124,12 @@ export type MutationUpdateMovieArgs = {
   userId: Scalars['ID']['input'];
 };
 
+
+export type MutationUpdateUserArgs = {
+  id: Scalars['ID']['input'];
+  settings: SettingsData;
+};
+
 export type Query = {
   __typename?: 'Query';
   books?: Maybe<Array<Maybe<Book>>>;
@@ -130,6 +137,7 @@ export type Query = {
   movieInfo?: Maybe<MovieInfo>;
   movies?: Maybe<Array<Maybe<Movie>>>;
   people?: Maybe<Array<Maybe<UserStats>>>;
+  user?: Maybe<User>;
 };
 
 
@@ -153,6 +161,23 @@ export type QueryMoviesArgs = {
   userId: Scalars['ID']['input'];
 };
 
+
+export type QueryUserArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type RegisterData = {
+  email: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type SettingsData = {
+  password?: InputMaybe<Scalars['String']['input']>;
+  shareBooks?: InputMaybe<Scalars['Boolean']['input']>;
+  shareMovies?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
@@ -164,18 +189,14 @@ export type User = {
   shareMovies?: Maybe<Scalars['Boolean']['output']>;
 };
 
-export type UserData = {
-  email: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-};
-
 export type UserStats = {
   __typename?: 'UserStats';
   books: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
   movies: Scalars['Int']['output'];
   name: Scalars['String']['output'];
+  shareBooks?: Maybe<Scalars['Boolean']['output']>;
+  shareMovies?: Maybe<Scalars['Boolean']['output']>;
   total: Scalars['Int']['output'];
 };
 
@@ -263,9 +284,10 @@ export type ResolversTypes = ResolversObject<{
   MovieInfo: ResolverTypeWrapper<MovieInfo>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  RegisterData: RegisterData;
+  SettingsData: SettingsData;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<User>;
-  UserData: UserData;
   UserStats: ResolverTypeWrapper<UserStats>;
 }>;
 
@@ -282,9 +304,10 @@ export type ResolversParentTypes = ResolversObject<{
   MovieInfo: MovieInfo;
   Mutation: {};
   Query: {};
+  RegisterData: RegisterData;
+  SettingsData: SettingsData;
   String: Scalars['String']['output'];
   User: User;
-  UserData: UserData;
   UserStats: UserStats;
 }>;
 
@@ -328,9 +351,10 @@ export type MutationResolvers<ContextType = IContextValue, ParentType extends Re
   createMovie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<MutationCreateMovieArgs, 'movieContent' | 'userId'>>;
   deleteBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationDeleteBookArgs, 'id' | 'userId'>>;
   deleteMovie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<MutationDeleteMovieArgs, 'id' | 'userId'>>;
-  register?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'captchaToken' | 'userData'>>;
+  register?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'captchaToken' | 'registerData'>>;
   updateBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationUpdateBookArgs, 'bookContent' | 'id' | 'userId'>>;
   updateMovie?: Resolver<Maybe<ResolversTypes['Movie']>, ParentType, ContextType, RequireFields<MutationUpdateMovieArgs, 'id' | 'movieContent' | 'userId'>>;
+  updateUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'id' | 'settings'>>;
 }>;
 
 export type QueryResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -339,6 +363,7 @@ export type QueryResolvers<ContextType = IContextValue, ParentType extends Resol
   movieInfo?: Resolver<Maybe<ResolversTypes['MovieInfo']>, ParentType, ContextType, RequireFields<QueryMovieInfoArgs, 'id'>>;
   movies?: Resolver<Maybe<Array<Maybe<ResolversTypes['Movie']>>>, ParentType, ContextType, RequireFields<QueryMoviesArgs, 'userId'>>;
   people?: Resolver<Maybe<Array<Maybe<ResolversTypes['UserStats']>>>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
 }>;
 
 export type UserResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
@@ -357,6 +382,8 @@ export type UserStatsResolvers<ContextType = IContextValue, ParentType extends R
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   movies?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  shareBooks?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  shareMovies?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

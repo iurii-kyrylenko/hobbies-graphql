@@ -6,7 +6,8 @@ import {
     User,
     BookContent,
     MovieContent,
-    UserData,
+    RegisterData,
+    SettingsData,
 } from "../__generated__/resolvers-types";
 import { hashPassword } from "../auth.js";
 
@@ -29,12 +30,18 @@ export class MongoDataSource {
             .project({
                 id: "$_id",
                 name: 1,
+                shareBooks: 1,
+                shareMovies: 1,
                 books: { $size: "$books" },
                 movies: { $size: "$movies" },
                 total: { $add: [{ $size: '$books' }, { $size: '$movies' }] }
               })
               .match({ total: { $gt: 0 } })
               .sort({ total: -1, name: 1 });
+    }
+
+    async findUserById(id: string) {
+        return this.UserModel.findById(id);
     }
 
     async findUserbyName(name: string) {
@@ -45,16 +52,24 @@ export class MongoDataSource {
         return this.UserModel.findOne({ $or: [{ name }, { email }] });
     }
 
-    async createUser(userData: UserData) {
-        const hashData = hashPassword(userData.password);
+    async createUser(registerData: RegisterData) {
+        const hashData = hashPassword(registerData.password);
         return await this.UserModel.create({
-            name: userData.name,
-            email: userData.email,
-            shareBooks: true,
-            shareMovies: true,
+            name: registerData.name,
+            email: registerData.email,
             ...hashData,
         });
     };
+
+    async updateUser(id: string, { password, shareBooks, shareMovies }: SettingsData) {
+        const hashData = password ? hashPassword(password) : {};
+        let update = {
+            shareBooks: !!shareBooks,
+            shareMovies: !!shareMovies,
+            ...hashData,
+        };
+        return this.UserModel.findByIdAndUpdate(id, update, { new: true });
+    }
 
     async getBooks(userId: string) {
         return this.BookModel.find({ userId }).sort({ _id: -1 });

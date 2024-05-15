@@ -4,20 +4,25 @@ import { jwtEncode, verifyAuth } from "../auth.js";
 import { throwBadRequest, throwForbidden } from "../errors.js";
 
 export const mutationsResolver: MutationResolvers<IContextValue, {}> = {
-    register: async (_parent, { captchaToken, userData }, { dataSources }) => {
+    register: async (_parent, { captchaToken, registerData }, { dataSources }) => {
         const { success, "error-codes": errors } =
             await dataSources.captchaApi.verifyCaptchaResponse(captchaToken);
         if (!success) {
             throwBadRequest(`Verify captcha error: ${errors[0]}`);
         }
         const user = await dataSources.mongoDataSource.findUserbyNameOrEmail(
-            userData.name, userData.email
+            registerData.name, registerData.email
         );
         if (user) {
-            throwForbidden(`User "${userData.name}" already exists`);
+            throwForbidden(`User "${registerData.name}" already exists`);
         }
-        const { id, email, name } = await dataSources.mongoDataSource.createUser(userData);
+        const { id, email, name } = await dataSources.mongoDataSource.createUser(registerData);
         return jwtEncode({ sub: id, email, name });
+    },
+
+    updateUser: (_parent, { id, settings }, { auth, dataSources }) => {
+        verifyAuth(auth, id);
+        return dataSources.mongoDataSource.updateUser(id, settings);
     },
 
     createBook: (_parent, { userId, bookContent }, { auth, dataSources }) => {

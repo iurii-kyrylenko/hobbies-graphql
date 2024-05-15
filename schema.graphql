@@ -19,15 +19,23 @@ type User {
 type UserStats {
     id: ID!
     name: String!
+    shareBooks: Boolean
+    shareMovies: Boolean
     books: Int!
     movies: Int!
     total: Int!
 }
 
-input UserData {
+input RegisterData {
     name: String!
     email: String!
     password: String!
+}
+
+input SettingsData {
+    password: String
+    shareBooks: Boolean
+    shareMovies: Boolean
 }
 
 type Book {
@@ -73,13 +81,17 @@ input MovieContent {
 type Query {
     people: [UserStats]
     login(name: String, password: String): String
+    user(id: ID!): User
+
     books(userId: ID!): [Book]
     movies(userId: ID!): [Movie]
     movieInfo(id: ID!): MovieInfo
 }
 
 type Mutation {
-    register(captchaToken: String!, userData: UserData!): String
+    register(captchaToken: String!, registerData: RegisterData!): String
+    updateUser(id: ID!, settings: SettingsData!): User
+
     createBook(userId: ID!, bookContent: BookContent!): Book
     updateBook(id: ID!, userId: ID!, bookContent: BookContent!): Book
     deleteBook(id: ID!, userId: ID!): Book

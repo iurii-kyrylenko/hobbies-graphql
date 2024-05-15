@@ -21,6 +21,10 @@ export const queriesResolver: QueryResolvers<IContextValue, {}> = {
         }
     },
 
+    user: (_parent, { id }, { dataSources }) => {
+        return dataSources.mongoDataSource.findUserById(id);
+    },
+
     books: (_parent, { userId }, { dataSources }) => {
         return dataSources.mongoDataSource.getBooks(userId);
     },
