@@ -10,6 +10,7 @@ import { MongoDataSource } from "./data-sources/mongo.js";
 import { resolvers } from "./resolvers/index.js";
 import { registerModels } from "./models/register-models.js";
 import { Auth, jwtDecode } from "./auth.js";
+import { BooksAPI } from "./data-sources/books-api.js";
 import { MoviesAPI } from "./data-sources/movies-api.js";
 import { CaptchaAPI } from "./data-sources/captcha-api.js";
 
@@ -18,8 +19,9 @@ const typeDefs = readFileSync("./schema.graphql", { encoding: "utf-8" });
 export interface IContextValue {
     dataSources: {
         mongoDataSource: MongoDataSource;
+        booksAPI: BooksAPI;
         moviesAPI: MoviesAPI;
-        captchaApi: CaptchaAPI
+        captchaApi: CaptchaAPI;
     };
     auth: Auth;
 }
@@ -44,11 +46,13 @@ const server = new ApolloServer<IContextValue>({
 const { url } = await startStandaloneServer(server, {
     listen: { port },
     context: async ({ req }) => {
+        const cache = server.cache;
         return {
             auth: jwtDecode(req?.headers?.authorization),
             dataSources: {
                 mongoDataSource: new MongoDataSource(dbConnection),
-                moviesAPI: new MoviesAPI({ cache: server.cache }),
+                booksAPI: new BooksAPI({ cache }),
+                moviesAPI: new MoviesAPI({ cache }),
                 captchaApi: new CaptchaAPI(),
             },
         }

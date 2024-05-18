@@ -47,6 +47,11 @@ type Book {
     completed: Date!
 }
 
+type BookInfo {
+    description: String
+    thumbnail: String
+}
+
 input BookContent {
     title: String!
     author: String!
@@ -84,6 +89,8 @@ type Query {
     user(id: ID!): User
 
     books(userId: ID!): [Book]
+    bookInfo(author: String!, title: String!): BookInfo
+
     movies(userId: ID!): [Movie]
     movieInfo(id: ID!): MovieInfo
 }

@@ -35,6 +35,12 @@ export type BookContent = {
   title: Scalars['String']['input'];
 };
 
+export type BookInfo = {
+  __typename?: 'BookInfo';
+  description?: Maybe<Scalars['String']['output']>;
+  thumbnail?: Maybe<Scalars['String']['output']>;
+};
+
 export enum BookKind {
   Audio = 'a',
   Mixed = 'r-a',
@@ -132,12 +138,19 @@ export type MutationUpdateUserArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  bookInfo?: Maybe<BookInfo>;
   books?: Maybe<Array<Maybe<Book>>>;
   login?: Maybe<Scalars['String']['output']>;
   movieInfo?: Maybe<MovieInfo>;
   movies?: Maybe<Array<Maybe<Movie>>>;
   people?: Maybe<Array<Maybe<UserStats>>>;
   user?: Maybe<User>;
+};
+
+
+export type QueryBookInfoArgs = {
+  author: Scalars['String']['input'];
+  title: Scalars['String']['input'];
 };
 
 
@@ -274,6 +287,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Book: ResolverTypeWrapper<Book>;
   BookContent: BookContent;
+  BookInfo: ResolverTypeWrapper<BookInfo>;
   BookKind: BookKind;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Date: ResolverTypeWrapper<Scalars['Date']['output']>;
@@ -295,6 +309,7 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Book: Book;
   BookContent: BookContent;
+  BookInfo: BookInfo;
   Boolean: Scalars['Boolean']['output'];
   Date: Scalars['Date']['output'];
   ID: Scalars['ID']['output'];
@@ -318,6 +333,12 @@ export type BookResolvers<ContextType = IContextValue, ParentType extends Resolv
   mode?: Resolver<ResolversTypes['BookKind'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type BookInfoResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['BookInfo'] = ResolversParentTypes['BookInfo']> = ResolversObject<{
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  thumbnail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -358,6 +379,7 @@ export type MutationResolvers<ContextType = IContextValue, ParentType extends Re
 }>;
 
 export type QueryResolvers<ContextType = IContextValue, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  bookInfo?: Resolver<Maybe<ResolversTypes['BookInfo']>, ParentType, ContextType, RequireFields<QueryBookInfoArgs, 'author' | 'title'>>;
   books?: Resolver<Maybe<Array<Maybe<ResolversTypes['Book']>>>, ParentType, ContextType, RequireFields<QueryBooksArgs, 'userId'>>;
   login?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, Partial<QueryLoginArgs>>;
   movieInfo?: Resolver<Maybe<ResolversTypes['MovieInfo']>, ParentType, ContextType, RequireFields<QueryMovieInfoArgs, 'id'>>;
@@ -390,6 +412,7 @@ export type UserStatsResolvers<ContextType = IContextValue, ParentType extends R
 
 export type Resolvers<ContextType = IContextValue> = ResolversObject<{
   Book?: BookResolvers<ContextType>;
+  BookInfo?: BookInfoResolvers<ContextType>;
   BookKind?: BookKindResolvers;
   Date?: GraphQLScalarType;
   Movie?: MovieResolvers<ContextType>;
