@@ -84,6 +84,8 @@ input MovieContent {
 }
 
 type Query {
+    ping: String
+
     people: [UserStats]
     login(name: String, password: String): String
     user(id: ID!): User

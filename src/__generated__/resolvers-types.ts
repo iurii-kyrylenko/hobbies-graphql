@@ -144,6 +144,7 @@ export type Query = {
   movieInfo?: Maybe<MovieInfo>;
   movies?: Maybe<Array<Maybe<Movie>>>;
   people?: Maybe<Array<Maybe<UserStats>>>;
+  ping?: Maybe<Scalars['String']['output']>;
   user?: Maybe<User>;
 };
 
@@ -385,6 +386,7 @@ export type QueryResolvers<ContextType = IContextValue, ParentType extends Resol
   movieInfo?: Resolver<Maybe<ResolversTypes['MovieInfo']>, ParentType, ContextType, RequireFields<QueryMovieInfoArgs, 'id'>>;
   movies?: Resolver<Maybe<Array<Maybe<ResolversTypes['Movie']>>>, ParentType, ContextType, RequireFields<QueryMoviesArgs, 'userId'>>;
   people?: Resolver<Maybe<Array<Maybe<ResolversTypes['UserStats']>>>, ParentType, ContextType>;
+  ping?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
 }>;
 
